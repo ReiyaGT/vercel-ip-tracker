@@ -48,5 +48,5 @@ export async function GET(request) {
     ])
 
   // 4. Otomatis redirect pengunjung ke URL tujuan setelah data tercatat
-  redirect('https://reiya.qzz.io')
+  redirect('https://roblox-cdn-finder.vercel.app/')
 }
