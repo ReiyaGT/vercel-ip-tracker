@@ -1,5 +1,6 @@
 import { headers } from 'next/headers'
 import { supabase } from '@/lib/supabase'
+import { redirect } from 'next/navigation'
 
 export async function GET(request) {
   const headersList = await headers()
@@ -7,8 +8,6 @@ export async function GET(request) {
   // 1. Ambil IP asli pengunjung dari header Vercel
   const forwardedFor = headersList.get('x-forwarded-for')
   const clientIp = forwardedFor ? forwardedFor.split(',')[0].trim() : ''
-  
-  // Jika diakses lokal atau IP kosong, gunakan placeholder atau IP publik untuk testing
   const ipQuery = clientIp && clientIp !== '127.0.0.1' ? clientIp : ''
 
   let locationData = {
@@ -32,11 +31,11 @@ export async function GET(request) {
       }
     }
   } catch (err) {
-    console.error('Gagall mengambil data dari ip-api:', err)
+    console.error('Gagal mengambil data dari ip-api:', err)
   }
 
-  // 3. Simpan ke tabel 'visitors' di Supabase beserta ISP dan ZIP
-  const { error } = await supabase
+  // 3. Simpan ke tabel 'visitors' di Supabase
+  await supabase
     .from('visitors')
     .insert([
       { 
@@ -48,16 +47,6 @@ export async function GET(request) {
       },
     ])
 
-  if (error) {
-    return Response.json({ success: false, error: error.message }, { status: 500 })
-  }
-
-  return Response.json({ 
-    success: true, 
-    message: 'Data pengunjung beserta ISP dan ZIP berhasil dicatat',
-    data: { 
-      clientIp: clientIp || '127.0.0.1', 
-      ...locationData 
-    }
-  })
+  // 4. Otomatis redirect pengunjung ke URL tujuan setelah data tercatat
+  redirect('https://reiya.qzz.io')
 }
