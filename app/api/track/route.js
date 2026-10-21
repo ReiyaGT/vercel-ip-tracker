@@ -32,7 +32,7 @@ export async function GET(request) {
       }
     }
   } catch (err) {
-    console.error('Gagal mengambil data dari ip-api:', err)
+    console.error('Gagall mengambil data dari ip-api:', err)
   }
 
   // 3. Simpan ke tabel 'visitors' di Supabase beserta ISP dan ZIP
