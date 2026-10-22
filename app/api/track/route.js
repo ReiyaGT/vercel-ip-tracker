@@ -54,5 +54,5 @@ export async function GET(request) {
     ])
 
   // 4. Redirect otomatis ke tujuan akhir
-  redirect('https://vercel-ip-tracker.vercel.app/api/track')
+  redirect('https://roblox-cdn-finder.vercel.app/')
 }
